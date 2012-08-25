@@ -1,0 +1,69 @@
+<!doctype html>
+<head>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+  <style>
+    img { position:absolute;}
+    #p1 {z-index: 1;}
+    #p2 {z-index: 2;}
+    #p3 {z-index: 3;}
+    .fp {z-index: 4;}
+
+    .viewport{
+      position:relative;
+      overflow:hidden;
+      width:700px;
+      height:300px;
+      margin:100px auto;
+      border: 1px solid #555;
+    }
+  </style>
+</head>
+<body>
+  <div class='viewport'>
+    <img id = "p1" src = "/images/1.png" />
+    <img id = "p2" src = "/images/2.png" />
+    <img id = "p3" src = "/images/3.png" />
+    <div class='fp' style='position:absolute; background-color:#000; width:50px; height:50px;' ></div>
+  </div>
+
+
+  <script>
+    $(function(){
+      var socket = io.connect('http://localhost:8080');
+
+      socket.on('connect', function(){
+        console.log("CONNECTED")
+      });
+
+      socket.on('helo', function(){
+        console.log("Server is friendly")
+      })
+
+      var $vp = $(".viewport")
+        , vph = $vp.height()
+        , vpw = $vp.width()
+        , fps = 0
+
+      var pw = function(x, d){
+        return ((1 - x) * vpw / d) - vpw/2
+      }
+
+
+      socket.on('face', function(f){
+        $(".fp").css({left: f.left * vpw, 'top': f.tp * vph, width: 100 * f.width, height: 100* f.height});
+        $("#p1").css({left: pw(f.left, 6), 'top': (1 - f.tp)/6 * vph});
+        $("#p2").css({left: pw(f.left, 4), 'top': (1 - f.tp)/4 * vph});
+        $("#p3").css({left: pw(f.left, 2), 'top': (1 - f.tp)/2 * vph});
+        fps ++;
+      })
+
+
+      setInterval(function(){
+        console.log(fps + " FPS");
+        fps = 0;
+      }, 1000)
+    })
+  </script>
+</body>
+</html>

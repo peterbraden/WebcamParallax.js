@@ -1,0 +1,12 @@
+{
+  "author": "Peter Braden <hi@peterbraden.co.uk>",
+  "name": "webcam-parallax",
+  "description": "parallax from the webcam",
+  "version": "0.0.0"
+  , "dependencies" : {
+      "opencv" : ">= 0.0.6"
+    , "express" : "*"
+    , "socket.io" : "*"
+  }
+
+}
