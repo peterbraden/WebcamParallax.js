@@ -26,8 +26,9 @@ sock.sockets.on('connection', function(socket){
   var webcam = new cv.VideoCapture(0)
   
   var grabImage = function(){
-    webcam.read(function(mat){
+    webcam.read(function(err,mat){
       mat.resize(300,200)
+
       mat.detectObject('./face.xml', {}, function(err, faces){
         
         if (faces.length){
